@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/arduino/motor",
-      "program": "d:/arduino/motor/build/Debug/outDebug",
+      "cwd": "d:/arduino/trabalho",
+      "program": "d:/arduino/trabalho/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -64,13 +64,13 @@ public:
         }
 
         if (ultimoValor != v)
-        {'
-           Serial.print("trava:");
+        {
+           Serial.print("\n\n\ntrava:");
             Serial.print(pino-13);
             Serial.print(" valor:");
             Serial.println(v);
             ultimoValor = v;
-        }'
+        }
     }
 
     int pegarUltimoValor(){
@@ -95,6 +95,7 @@ void loop()
     {
         digitalWrite(ledVerde,HIGH);
         digitalWrite(ledVermelho,LOW);
+        Serial.println("\n\nCOFRE DESTRAVADO");
     }else{
         digitalWrite(ledVerde,LOW);
         digitalWrite(ledVermelho,HIGH);
