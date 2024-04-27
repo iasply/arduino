@@ -1,5 +1,4 @@
-// C++ code
-//
+
 float sensor = 0.0;
 float constanteDeEquivalencia = 5.0 / 233.0;
 float tara = 0.0;
@@ -10,32 +9,50 @@ int retornoPinoComando = 0;
 
 enum Comando
 {
-    ZERAR_TARA = 2,
     TARA = 1,
-    SAIR = 0
+    ZERAR_TARA = 2,
+    SAIR = 3
 };
 
 class PainelDeComando
 {
+    void limparSerial()
+    {
+        while (Serial.available() > 0)
+        {
+            char dadoDescartado = Serial.read();
+        }
+    }
 
     int recebido()
     {
-        if (Serial.available())
+        bool loop = !Serial.available();
+
+        while (loop)
         {
-            int comando = Serial.parseInt();
-            return comando;
+            if (Serial.available())
+            {
+
+                int comando = Serial.parseInt();
+                if (comando != 0)
+                {
+                    Serial.flush();
+                    return comando;
+                }
+
+                loop = true;
+            }
         }
-        
-        return Comando::SAIR;
     }
 
-    void opcoesPrint()
+    void
+    opcoesPrint()
     {
         Serial.println("Opcoes de comando");
         Serial.println("*****************");
-        Serial.println("Digite [2] para ZERAR TARA");
         Serial.println("Digite [1] para TARA");
-        Serial.println("Digite [0] para SAIR");
+        Serial.println("Digite [2] para ZERAR TARA");
+        Serial.println("Digite [3] para SAIR");
         Serial.println("*****************");
     }
 
@@ -47,27 +64,31 @@ public:
         bool loop = true;
         while (loop)
         {
+            limparSerial();
             opcoesPrint();
-            
+
             int comando = recebido();
+
+            Serial.print("comando recebido = ");
             Serial.println(comando);
             switch (comando)
             {
             case ZERAR_TARA:
                 tara = 0.0;
-                loop=false;
+                loop = false;
+                Serial.println("tara zerada");
                 break;
             case TARA:
-                tara = 0.0;
                 tara = sensor;
-                loop=false;
+                loop = false;
+                Serial.print("peso adicionado a tara = ");
+                Serial.println(tara * constanteDeEquivalencia);
                 break;
             default:
-                loop=false;
+                Serial.println("saida pelo default");
                 break;
             }
         }
-    
     }
 };
 
@@ -88,12 +109,11 @@ void loop()
     {
         PainelDeComando painelDeComando = PainelDeComando();
         painelDeComando.iniciarMenu();
-        Serial.println("subiu");
     }
 
-    Serial.print("sensor = ");
+    float peso = (sensor - tara) * constanteDeEquivalencia;
+    Serial.print("peso = ");
+    Serial.println(peso);
 
-    Serial.println((sensor - tara) * constanteDeEquivalencia);
-
-    delay(100); // Wait for 100 millisecond(s)
+    delay(100);
 }
